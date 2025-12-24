@@ -1,0 +1,19 @@
+{
+    "name": "video-call-server",
+    "version": "1.0.0",
+    "description": "Signaling server for WebRTC video calling app",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "node --watch index.js"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "socket.io": "^4.7.2"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
