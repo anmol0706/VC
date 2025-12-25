@@ -186,10 +186,19 @@ export function useMediaDevices() {
                 if (oldVideoTrack) {
                     streamRef.current.removeTrack(oldVideoTrack)
                 }
+
+                // Ensure the new track is enabled (not paused)
+                newVideoTrack.enabled = !isVideoOff
                 streamRef.current.addTrack(newVideoTrack)
 
-                // Update state
-                setLocalStream(streamRef.current)
+                // Create a new MediaStream to trigger React state update
+                // (same reference won't trigger re-render)
+                const updatedStream = new MediaStream([
+                    ...streamRef.current.getAudioTracks(),
+                    ...streamRef.current.getVideoTracks()
+                ])
+                streamRef.current = updatedStream
+                setLocalStream(updatedStream)
             }
 
             setFacingMode(newFacingMode)
@@ -197,7 +206,7 @@ export function useMediaDevices() {
             console.error('Failed to switch camera:', err)
             setError('Failed to switch camera. Please try again.')
         }
-    }, [facingMode, hasMultipleCameras, videoQuality])
+    }, [facingMode, hasMultipleCameras, videoQuality, isVideoOff])
 
     /**
      * Update video quality (for adaptive streaming)
