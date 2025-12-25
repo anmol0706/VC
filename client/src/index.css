@@ -333,3 +333,65 @@ video {
         @apply min-w-[64px] min-h-[64px] w-16 h-16;
     }
 }
+
+/* ========================================
+   Filter Panel styles
+   ======================================== */
+.filter-panel {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.filter-item {
+    @apply flex flex-col items-center gap-2 p-2 rounded-xl transition-all duration-200;
+    @apply bg-transparent hover:bg-white/5;
+}
+
+.filter-item-active {
+    @apply bg-white/10 ring-2 ring-blue-500;
+}
+
+.filter-preview {
+    @apply w-16 h-16 rounded-xl overflow-hidden;
+    @apply transition-transform duration-200;
+}
+
+.filter-item:hover .filter-preview {
+    @apply scale-105;
+}
+
+.filter-name {
+    @apply text-xs text-gray-300 font-medium;
+}
+
+.filter-check {
+    @apply absolute top-1 right-1 w-5 h-5 rounded-full;
+    @apply bg-blue-500 flex items-center justify-center;
+}
+
+.filter-item {
+    position: relative;
+}
+
+/* Responsive filter grid */
+@media (min-width: 480px) {
+    .filter-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .filter-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .filter-preview {
+        @apply w-20 h-20;
+    }
+}

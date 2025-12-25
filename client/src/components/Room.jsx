@@ -19,11 +19,13 @@ import VideoGrid from './VideoGrid'
 import Controls from './Controls'
 import PiP from './PiP'
 import ParticipantsList from './ParticipantsList'
+import FilterPanel from './FilterPanel'
 
 // Hooks
 import { useSocket } from '../hooks/useSocket'
 import { useMediaDevices } from '../hooks/useMediaDevices'
 import { useWebRTC } from '../hooks/useWebRTC'
+import { useVideoFilters } from '../hooks/useVideoFilters'
 
 function Room() {
     // Get room ID from URL parameters
@@ -40,6 +42,7 @@ function Room() {
 
     // UI state
     const [showParticipants, setShowParticipants] = useState(false)
+    const [showFilters, setShowFilters] = useState(false)
     const [focusedParticipantId, setFocusedParticipantId] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -96,6 +99,15 @@ function Room() {
         sendAnswer,
         sendIceCandidate
     })
+
+    // Video filters
+    const {
+        currentFilter,
+        filterStyle,
+        availableFilters,
+        setFilter,
+        hasActiveFilter
+    } = useVideoFilters()
 
     // ========================================
     // Initialize media on mount
@@ -275,6 +287,7 @@ function Room() {
                     stream={localStream}
                     isMuted={isMuted}
                     isVideoOff={isVideoOff}
+                    filterStyle={filterStyle}
                 />
             )}
 
@@ -285,10 +298,12 @@ function Room() {
                 onToggleMute={toggleMute}
                 onToggleVideo={toggleVideo}
                 onSwitchCamera={switchCamera}
+                onToggleFilters={() => setShowFilters(true)}
                 onEndCall={handleEndCall}
                 onToggleParticipants={handleToggleParticipants}
                 participantCount={participants.length + 1} // +1 for self
                 canSwitchCamera={hasMultipleCameras}
+                hasActiveFilter={hasActiveFilter}
             />
 
             {/* Participants List Panel */}
@@ -298,6 +313,15 @@ function Room() {
                 roomId={roomId}
                 isOpen={showParticipants}
                 onClose={() => setShowParticipants(false)}
+            />
+
+            {/* Filter Panel */}
+            <FilterPanel
+                isOpen={showFilters}
+                onClose={() => setShowFilters(false)}
+                filters={availableFilters}
+                currentFilter={currentFilter}
+                onSelectFilter={setFilter}
             />
         </div>
     )

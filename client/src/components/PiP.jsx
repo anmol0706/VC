@@ -17,7 +17,8 @@ import Draggable from 'react-draggable'
 function PiP({
     stream,
     isMuted = false,
-    isVideoOff = false
+    isVideoOff = false,
+    filterStyle = {}
 }) {
     // Reference to the draggable container
     const nodeRef = useRef(null)
@@ -112,6 +113,7 @@ function PiP({
                         playsInline
                         muted // Always mute self-view to prevent echo
                         className="video-mirrored"
+                        style={filterStyle}
                     />
                 ) : (
                     // Placeholder when video is off
